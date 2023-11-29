@@ -34,5 +34,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project will use MERN stack, and will be hosted on Heroku.",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ayevs/metrodb.git"
+  },
+  "author": "Alexandr Petrov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ayevs/metrodb/issues"
+  },
+  "homepage": "https://github.com/Ayevs/metrodb#readme"
 }
