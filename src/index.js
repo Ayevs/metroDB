@@ -1,14 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import "./index.css";
+import App from "./front-end/App";
+import reportWebVitals from "./reportWebVitals";
+import NoPage from "./front-end/NoPage";
+import Login from "./front-end/Login";
+import ProtectedRoute from "./front-end/ProtectedRoute";
+import Dashboard from "./front-end/Dashboard";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/login" element={<Login />} />
+      <ProtectedRoute path="/dashbord" element={<Dashboard />} />
+      <Route path="*" element={<NoPage />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
