@@ -31,7 +31,7 @@ const ItemSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("Users", UserSchema, "Users");
-const Item = mongoose.model("Items", ItemSchema, "Items");
+const Items = mongoose.model("Items", ItemSchema, "Items");
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -63,14 +63,14 @@ app.post("/login", async (req, res) => {
 });
 
 const authMiddleware = (req, res, next) => {
-  const token = req.header("x-auth-token");
+  const token = localStorage.getItem("token");
 
   if (!token) {
     return res.status(401).send({ error: "no token, authetication denied" });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, "yourJWTSecret");
     req.user = decoded.user;
     next();
   } catch (error) {
@@ -79,13 +79,9 @@ const authMiddleware = (req, res, next) => {
 };
 
 app.get("/items", authMiddleware, async (req, res) => {
-  try {
-    const items = await Item.find();
-    res.json(items);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("server error");
-  }
+  Items.find()
+  .then((item) => res.json(item))
+  .catch((err) => res.json(err));
 });
 
 //we set up the server to run

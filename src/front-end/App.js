@@ -2,8 +2,14 @@ import "./App.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
+import { useEffect } from "react";
 
 function App() {
+
+  useEffect(() => {
+    localStorage.removeItem('token')
+  }, []);
+  
   return (
     <div className="App">
       <p>
