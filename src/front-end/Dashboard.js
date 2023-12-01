@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const getToken = () => {
@@ -13,9 +13,11 @@ const isAuthenticated = () => {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  if (!isAuthenticated()) {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    }
+  }, [navigate]);
   return <h1>this is my Dashbord site</h1>;
 };
 
