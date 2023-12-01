@@ -13,10 +13,10 @@ const isAuthenticated = () => {
     jwt.verify(token, "yourJWTSecret");
     return true;
   } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return false;
-      console.log("the token has expired");
-    }
+    // if (error.name === "TokenExpiredError") {
+    //   return false;
+    //   console.log("the token has expired");
+    // }
     //token isnt valid
     return false;
   }

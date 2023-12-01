@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const { userInfo } = require("os");
 const authMiddleware = require("./authMiddleware");
 
 const app = express();

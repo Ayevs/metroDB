@@ -15,7 +15,7 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/login" element={<Login />} />
-      <ProtectedRoute path="/dashbord" element={<Dashboard />} />
+      {/* <ProtectedRoute path="/dashbord" element={<Dashboard />} /> */}
       <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>
