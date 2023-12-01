@@ -3,15 +3,13 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const { userInfo } = require("os");
 const authMiddleware = require("./authMiddleware");
 
 const app = express();
 //body parser which handles the json
 //gives us the abilityt to access data from the post request vio req.body
 app.use(express.json());
-
-//enable all cors requests
-app.use(cors());
 
 //connect to the mongo db atlas
 mongoose
@@ -23,16 +21,7 @@ const UserSchema = new mongoose.Schema({
   username: String,
   password: String, //this passowrd is gona be stored in the db as a hashed string
 });
-
-const ItemSchema = new mongoose.Schema({
-  name: String,
-  department: String,
-  price: Number,
-  quantity: Number,
-});
-
 const User = mongoose.model("Users", UserSchema, "Users");
-const Item = mongoose.model("Items", ItemSchema, "Items");
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -63,18 +52,8 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/items", authMiddleware, async (req, res) => {
-  try {
-    const items = await Item.find();
-    res.json(items);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("server error");
-  }
-});
-
 //we set up the server to run
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running on http://localhost:${PORT}`);
 });

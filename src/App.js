@@ -6,7 +6,10 @@ import "primeflex/primeflex.css";
 function App() {
   return (
     <div className="App">
-      <p>This will be the home page for my metro website.</p>
+      <p>
+        This will be my metroDB website that is hosted on heroku. For now
+        nothing has been setup
+      </p>
     </div>
   );
 }
