@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap"; // importing react bootstrap components
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   //we use ustateate hooks to store the username and password
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   //now i create a login function
   const Login = async () => {
@@ -18,13 +20,12 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("token: ", data.token);
 
         localStorage.setItem("token", data.token);
 
         setUsername("");
         setPassword("");
-        alert("logged in");
+        navigate("/dashboard");
       } else {
         alert("failed to login the user, wrong cridentials");
       }
