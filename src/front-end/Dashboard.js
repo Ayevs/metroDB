@@ -6,8 +6,6 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primeflex/primeflex.css";
 import "primereact/resources/primereact.min.css";
 
-
-
 const getToken = () => {
   return localStorage.getItem("token");
 };
@@ -28,10 +26,10 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
-  useEffect(()=> {
+  useEffect(() => {
     fetch("http://localhost:3001/items")
       .then((response) => {
-        if (!response.ok){
+        if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
@@ -45,17 +43,39 @@ const Dashboard = () => {
       });
   }, []);
 
-  return(
-    <DataTable
-        value={items}
-        showGridlines
-        tableStyle={{ minWidth: "50rem" }}
-      >
-        <Column field="name" header="Name" sortable style={{ width: '25%' }}></Column>
-        <Column field="department" header="Department" sortable style={{ width: '25%' }}></Column>
-        <Column field="price" header="Price" sortable style={{ width: '25%' }}></Column>
-        <Column field="quantity" header="Quantity" sortable style={{ width: '25%' }}></Column>
-      </DataTable>
+  return (
+    <DataTable value={items} showGridlines tableStyle={{ minWidth: "50rem" }}>
+      <Column
+        field="name"
+        header="Name"
+        sortable
+        style={{ width: "25%" }}
+      ></Column>
+      <Column
+        field="department"
+        header="Department"
+        sortable
+        style={{ width: "25%" }}
+      ></Column>
+      <Column
+        field="price"
+        header="Price"
+        sortable
+        style={{ width: "25%" }}
+      ></Column>
+      <Column
+        field="quantity"
+        header="Quantity"
+        sortable
+        style={{ width: "25%" }}
+      ></Column>
+      <Column
+        field="brand"
+        header="Brand"
+        sortable
+        style={{ width: "25%" }}
+      ></Column>
+    </DataTable>
   );
 };
 

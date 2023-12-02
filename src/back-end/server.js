@@ -28,6 +28,7 @@ const ItemSchema = new mongoose.Schema({
   department: String,
   price: Number,
   quantity: Number,
+  brand: String,
 });
 
 const User = mongoose.model("Users", UserSchema, "Users");
@@ -62,26 +63,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
-const authMiddleware = (req, res, next) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    return res.status(401).send({ error: "no token, authetication denied" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, "yourJWTSecret");
-    req.user = decoded.user;
-    next();
-  } catch (error) {
-    res.status(401).send({ error: "token is not valid" });
-  }
-};
-
-app.get("/items", authMiddleware, async (req, res) => {
+app.get("/items", async (req, res) => {
   Items.find()
-  .then((item) => res.json(item))
-  .catch((err) => res.json(err));
+    .then((item) => res.json(item))
+    .catch((err) => res.json(err));
 });
 
 //we set up the server to run
