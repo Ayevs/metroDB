@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap"; // importing react bootstrap components
+import { Form, Button } from "react-bootstrap"; // importing react bootstrap components
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import "./App.css";
 
 function Login() {
   //we use ustateate hooks to store the username and password
@@ -36,21 +38,15 @@ function Login() {
     }
   };
 
-  const loginWrapper = {
-    display: "flex",
-    justifyContent: "space-around",
-    flexDirection: "row",
-    margin: "100px",
-  };
-
   //render commenent
   return (
-    <Container style={loginWrapper}>
-      <div>
-        <h2>Login</h2>
-        <br />
+    <div>
+      <Navbar />
+      <div className="loginWrapper">
         <Form>
           <Form.Group>
+            <h2>Login</h2>
+            <br />
             <Form.Label>Username</Form.Label>
             <Form.Control
               type="text"
@@ -74,7 +70,7 @@ function Login() {
           </Button>
         </Form>
       </div>
-    </Container>
+    </div>
   );
 }
 

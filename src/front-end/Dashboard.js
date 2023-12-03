@@ -5,6 +5,7 @@ import { Column } from "primereact/column";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primeflex/primeflex.css";
 import "primereact/resources/primereact.min.css";
+import Navbar from "./Navbar";
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -44,38 +45,45 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <DataTable value={items} showGridlines tableStyle={{ minWidth: "50rem" }}>
-      <Column
-        field="name"
-        header="Name"
-        sortable
-        style={{ width: "25%" }}
-      ></Column>
-      <Column
-        field="department"
-        header="Department"
-        sortable
-        style={{ width: "25%" }}
-      ></Column>
-      <Column
-        field="price"
-        header="Price"
-        sortable
-        style={{ width: "25%" }}
-      ></Column>
-      <Column
-        field="quantity"
-        header="Quantity"
-        sortable
-        style={{ width: "25%" }}
-      ></Column>
-      <Column
-        field="brand"
-        header="Brand"
-        sortable
-        style={{ width: "25%" }}
-      ></Column>
-    </DataTable>
+    <div>
+      <Navbar />
+      <DataTable
+        value={items}
+        showGridlines
+        tableStyle={{ minWidth: "50rem", paddingRight: "10%" }}
+      >
+        <Column
+          field="name"
+          header="Name"
+          sortable
+          style={{ width: "25%" }}
+        ></Column>
+        <Column
+          field="department"
+          header="Department"
+          sortable
+          style={{ width: "25%" }}
+        ></Column>
+        <Column
+          field="price"
+          header="Price"
+          sortable
+          style={{ width: "25%" }}
+        ></Column>
+        <Column
+          field="quantity"
+          header="Quantity"
+          sortable
+          style={{ width: "25%" }}
+        ></Column>
+        <Column
+          field="brand"
+          header="Brand"
+          sortable
+          style={{ width: "25%" }}
+        ></Column>
+      </DataTable>
+    </div>
   );
 };
 

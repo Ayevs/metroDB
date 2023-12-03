@@ -3,7 +3,7 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import { useEffect } from "react";
-import { Image } from "primereact/image";
+import Navbar from "./Navbar";
 
 function App() {
   useEffect(() => {
@@ -11,18 +11,14 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <div className="p-col-4 " style={{ textAlign: "left" }}>
-        <Image
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Metro_Inc._logo.svg/500px-Metro_Inc._logo.svg.png"
-          alt="Your Image"
-        />
+    <div className="Main-App">
+      <Navbar />
+      <div className="App">
+        <p>
+          This will be my metroDB website that is hosted on heroku. For now
+          nothing has been setup
+        </p>
       </div>
-
-      <p>
-        This will be my metroDB website that is hosted on heroku. For now
-        nothing has been setup
-      </p>
     </div>
   );
 }
