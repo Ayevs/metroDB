@@ -6,7 +6,6 @@
   text-align: center;
   
 }
-
 .Main-App {
   box-sizing: border-box;
   margin: 0;
@@ -19,7 +18,6 @@
   gap: 2rem;
   padding: 0 1rem;
   align-items: center;
-
 }
 .Main-Nav ul {
   padding: 0;
@@ -28,6 +26,8 @@
   display: flex;
   gap: 1rem;
   background-color: transparent;
+  font-weight: bold;
+  
 }
 .Main-Nav li {
   background-color: transparent;
@@ -35,7 +35,7 @@
 .Main-Nav a{
   color: inherit;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 30px;
   background-color: transparent;
 }
 .Main-Nav li:hover {
@@ -49,4 +49,11 @@
   flex-direction: row;
   margin: 100px;
   padding: 0 20%;
-};
+}
+
+.shoppingCart {
+  max-height: 40px;
+  background-color: transparent;
+  padding-right: 10px;
+  padding-left: 10px;
+}
