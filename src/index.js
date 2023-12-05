@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import Login from "./front-end/Login";
 import NoPage from "./front-end/NoPage";
 import Dashboard from "./front-end/Dashboard";
+import OnSale from "./front-end/OnSale";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,6 +16,7 @@ root.render(
       <Route path="/" element={<App />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/sale" element={<OnSale />} />
       <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>
