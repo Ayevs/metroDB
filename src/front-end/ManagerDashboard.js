@@ -73,7 +73,13 @@ const ManagerDashboard = () => {
       );
 
       if (response.ok) {
+        try {
+        const updatedItem = await response.json();
+        console.log("increasing quantity");
         fetchItems();
+      } catch (jsonError) {
+        console.error("Error parsing JSON:", jsonError);
+      }
       } else {
         console.error("failed to increase quantity");
       }

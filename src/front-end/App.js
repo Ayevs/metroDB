@@ -49,6 +49,7 @@ function App() {
       <Navbar />
       {/* <h1 className="tittle">Items currently on sale!</h1> */}
       <div className="App">
+        <h1 style={{paddingTop: 20}}>Welcome to Metro</h1>
         <Carousel
           value={items}
           numVisible={5}
@@ -57,6 +58,7 @@ function App() {
           circular
           autoplayInterval={3000}
           itemTemplate={itemsTemplate}
+          style={{paddingTop: 20}}
         />
       </div>
     </div>

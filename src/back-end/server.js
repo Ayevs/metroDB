@@ -46,19 +46,6 @@ const OnSaleSchema = new mongoose.Schema({
   brand: String,
 });
 
-ItemSchema.methods.increaseQuantity = async function (amount) {
-  this.quantity += amount;
-  await this.save();
-};
-
-ItemSchema.methods.decreaseQuantity = async function (amount) {
-  if (this.quantity >= amount) {
-    this.quantity -= amount;
-    await this.save();
-  } else {
-    throw new Error("isufficient quantity to decrease");
-  }
-};
 
 const User = mongoose.model("Users", UserSchema, "Users");
 const Items = mongoose.model("Items", ItemSchema, "Items");
@@ -112,17 +99,27 @@ app.get("/onsale", async (req, res) => {
 });
 
 app.post("/items/increase-quantity/:id", async (req, res) => {
-  const itemId = req.params._id;
+  const itemId = req.params.id;
+  console.log("Requested item ID:", itemId);
   const { amount } = req.body;
 
   try {
-    const item = await item.findById(itemId);
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(itemId);
+    if (!isValidObjectId){
+      return res.status(400).json({error: "invalid item id format"});
+    }
+    const item = await Items.findById(itemId);
     if (!item) {
       return res.status(404).json({ error: "item not found" });
     }
-    item.quantity += amount;
-    await item.save();
-    res.json(item);
+
+    const updatedItem = await Items.findOneAndUpdate(
+      { _id: itemId },
+      { $inc: { quantity: amount } },
+      { new: true }
+    );
+
+    res.json(updatedItem);
   } catch (error) {
     console.error("error increasing quantity:", error);
     res.status(500).json({ error: "internal server error" });
