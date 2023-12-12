@@ -128,17 +128,26 @@ app.post("/items/increase-quantity/:id", async (req, res) => {
 
 app.post("/items/decrease-quantity/:id", async (req, res) => {
   const itemId = req.params.id;
-  const amount = parseInt(req.body.amount, 10) || 1;
+  console.log("Requested item ID:", itemId);
+  const { amount } = req.body;
 
   try {
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(itemId);
+    if (!isValidObjectId){
+      return res.status(400).json({error: "invalid item id format"});
+    }
     const item = await Items.findById(itemId);
     if (!item) {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    await item.decreaseQuantity(amount);
+    const updatedItem = await Items.findOneAndUpdate(
+      { _id: itemId },
+      { $inc: { quantity: amount } },
+      { new: true }
+    )
 
-    res.json({ success: true, message: "decreased quantity" });
+    res.json(updatedItem);
   } catch (error) {
     console.error("Error decreasing quantity:", error);
     res.status(500).json({ error: "Internal server error" });

@@ -62,7 +62,7 @@ const ManagerDashboard = () => {
   const increaseQuantity = async (item) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/increase-quantity/${item._id}`,
+        `http://localhost:3001/items/increase-quantity/${item._id}`,
         {
           method: "POST",
           headers: {
@@ -93,16 +93,22 @@ const ManagerDashboard = () => {
     try {
       if (item.quantity > 0) {
         const response = await fetch(
-          `http://localhost:3001/decrease-quantity/${item._id}`,
+          `http://localhost:3001/items/decrease-quantity/${item._id}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: 1 }),
+            body: JSON.stringify({ amount: -1 }),
           }
         );
 
         if (response.ok) {
+          try {
+          const updatedItem = await response.json();
+          console.log("increasing quantity");
           fetchItems();
+        } catch (jsonError) {
+          console.error("Error parsing JSON:", jsonError);
+        }
         } else {
           console.error("failed to decrease quantity");
         }
