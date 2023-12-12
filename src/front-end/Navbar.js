@@ -2,9 +2,51 @@ import "./App.css";
 import { Sidebar } from "primereact/sidebar";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import emailjs from "emailjs-com";
+import { sendConfirmationEmail } from "./emailService";
 
 export default function Navbar() {
   const [visible, setVisible] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [email, setEmail] = useState("");
+
+  const updateCartItemQuantity = (itemId, newQuantity) => {
+    const updateCart = cart.map((item) =>
+      item.itemId === itemId ? { ...item, quantity: newQuantity } : item
+    );
+    setCart(updateCart);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userEmail: email,
+          cart: cart,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      setCart([]);
+
+      setVisible(false);
+
+      const responseData = await response.json();
+      console.log(responseData.message);
+
+      await sendConfirmationEmail(email, responseData.orderDetails);
+    } catch (error) {
+      console.error("error during checkout:", error);
+    }
+  };
 
   const backgroundColor = {
     backgroundColor: "transparent",
@@ -25,34 +67,7 @@ export default function Navbar() {
         <li>
           <a href="/sale">On sale</a>
         </li>
-        <li>
-          <a href="/login">Login</a>
-        </li>
-        <li>
-          <Button style={{ backgroundColor: "transparent", border: 0 }}>
-            <img
-              className="shoppingCart"
-              src="https://cdn-icons-png.flaticon.com/512/263/263142.png"
-              alt="Metro Logo"
-              onClick={() => setVisible(true)}
-            />
-          </Button>
-        </li>
       </ul>
-      <Sidebar
-        visible={visible}
-        position="right"
-        onHide={() => setVisible(false)}
-      >
-        <h2>Welcome to your cart!</h2>
-        <br />
-        <p>
-          The cart is currently under construction. But our developers are
-          working hard on finishing it for your use.
-        </p>
-        <br />
-        <p>Please follow us on our socials to keep up with our news!</p>
-      </Sidebar>
     </nav>
   );
 }

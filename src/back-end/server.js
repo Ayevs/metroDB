@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const emailjs = require("emailjs-com");
 
 const app = express();
 //body parser which handles the json
@@ -21,6 +22,7 @@ mongoose
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String, //this passowrd is gona be stored in the db as a hashed string
+  role: String,
 });
 
 const ItemSchema = new mongoose.Schema({
@@ -31,8 +33,36 @@ const ItemSchema = new mongoose.Schema({
   brand: String,
 });
 
+const OnSaleSchema = new mongoose.Schema({
+  name: String,
+  department: String,
+  price: Number,
+  discount: {
+    type: Number,
+    min: 0,
+    max: 100,
+  },
+  quantity: Number,
+  brand: String,
+});
+
+ItemSchema.methods.increaseQuantity = async function (amount) {
+  this.quantity += amount;
+  await this.save();
+};
+
+ItemSchema.methods.decreaseQuantity = async function (amount) {
+  if (this.quantity >= amount) {
+    this.quantity -= amount;
+    await this.save();
+  } else {
+    throw new Error("isufficient quantity to decrease");
+  }
+};
+
 const User = mongoose.model("Users", UserSchema, "Users");
 const Items = mongoose.model("Items", ItemSchema, "Items");
+const OnSale = mongoose.model("OnSale", OnSaleSchema, "OnSale");
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -52,13 +82,19 @@ app.post("/login", async (req, res) => {
     }
 
     //now we create a jwt token for the this session
-    const token = jwt.sign({ userId: user._id }, "yourJWTSecret", {
-      expiresIn: "1h",
-    });
-    res.send({ token, success: true });
-    console.log(`User: ${username} was logged in and given the token`);
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "yourJWTSecret",
+      {
+        expiresIn: "1h",
+      }
+    );
+    console.log(
+      `User: ${username} with role ${user.role} logged in and given the token`
+    );
+    res.json({ token, role: user.role, success: true });
   } catch (error) {
-    console.log("there was a internal server error trying to login");
+    console.log("there was a internal server error trying to login", error);
     res.status(500).send({ error: "internal server error" });
   }
 });
@@ -67,6 +103,49 @@ app.get("/items", async (req, res) => {
   Items.find()
     .then((item) => res.json(item))
     .catch((err) => res.json(err));
+});
+
+app.get("/onsale", async (req, res) => {
+  OnSale.find()
+    .then((item) => res.json(item))
+    .catch((err) => res.json(err));
+});
+
+app.post("/items/increase-quantity/:id", async (req, res) => {
+  const itemId = req.params._id;
+  const { amount } = req.body;
+
+  try {
+    const item = await item.findById(itemId);
+    if (!item) {
+      return res.status(404).json({ error: "item not found" });
+    }
+    item.quantity += amount;
+    await item.save();
+    res.json(item);
+  } catch (error) {
+    console.error("error increasing quantity:", error);
+    res.status(500).json({ error: "internal server error" });
+  }
+});
+
+app.post("/items/decrease-quantity/:id", async (req, res) => {
+  const itemId = req.params.id;
+  const amount = parseInt(req.body.amount, 10) || 1;
+
+  try {
+    const item = await Items.findById(itemId);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    await item.decreaseQuantity(amount);
+
+    res.json({ success: true, message: "decreased quantity" });
+  } catch (error) {
+    console.error("Error decreasing quantity:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 //we set up the server to run

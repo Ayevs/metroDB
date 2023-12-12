@@ -6,6 +6,8 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primeflex/primeflex.css";
 import "primereact/resources/primereact.min.css";
 import Navbar from "./Navbar";
+import ManagerDashboard from "./ManagerDashboard";
+import CashierDashboard from "./CashierDashboard";
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -19,7 +21,7 @@ const isAuthenticated = () => {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [items, setItems] = useState([]);
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -28,63 +30,27 @@ const Dashboard = () => {
   }, [navigate]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/items")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("fetched data: ", data);
-        setItems(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    const storedRole = localStorage.getItem("role");
 
-  return (
-    <div>
-      <Navbar />
-      <DataTable
-        value={items}
-        showGridlines
-        tableStyle={{ minWidth: "50rem", paddingRight: "10%" }}
-      >
-        <Column
-          field="name"
-          header="Name"
-          sortable
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="department"
-          header="Department"
-          sortable
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="price"
-          header="Price"
-          sortable
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="quantity"
-          header="Quantity"
-          sortable
-          style={{ width: "25%" }}
-        ></Column>
-        <Column
-          field="brand"
-          header="Brand"
-          sortable
-          style={{ width: "25%" }}
-        ></Column>
-      </DataTable>
-    </div>
-  );
+    if (!storedRole) {
+      navigate("/login");
+    } else {
+      setUserRole(storedRole);
+    }
+  }, [navigate]);
+
+  const renderDashboard = () => {
+    switch (userRole) {
+      case "manager":
+        return <ManagerDashboard />;
+      case "cashier":
+        return <CashierDashboard />;
+      default:
+        return <p>Uknown role</p>;
+    }
+  };
+
+  return <div>{renderDashboard()}</div>;
 };
 
 export default Dashboard;

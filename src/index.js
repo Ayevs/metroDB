@@ -8,8 +8,10 @@ import Login from "./front-end/Login";
 import NoPage from "./front-end/NoPage";
 import Dashboard from "./front-end/Dashboard";
 import OnSale from "./front-end/OnSale";
+import emailjs from "emailjs-com";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+emailjs.init("zQwGM3eQ6YV6nOX9V");
 root.render(
   <BrowserRouter>
     <Routes>

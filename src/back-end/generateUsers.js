@@ -9,14 +9,15 @@ mongoose
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String,
+  role: String,
 });
 
 const User = mongoose.model("Users", UserSchema, "Users");
 
 const users = [
-  { username: "manager", password: "admin" },
-  { username: "assistant", password: "ilovezebras" },
-  { username: "alexandr", password: "qwerde" },
+  { username: "manager", password: "admin", role: "manager" },
+  { username: "assistant", password: "ilovezebras", role: "manager" },
+  { username: "alexandr", password: "qwerde", role: "cashier" },
   //we can add as many more users as we need and they will be hardcoded into the user collection of the metrodb server
 ];
 
@@ -27,6 +28,7 @@ const generateHashedPasswords = async () => {
       const newUser = new User({
         username: user.username,
         password: hashedPassword,
+        role: user.role,
       });
       await newUser.save();
       console.log(
